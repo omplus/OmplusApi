@@ -12,13 +12,12 @@ client = MongoClient()
 # app.config['MONGO_DBNAME'] = 'om'
 
 # Access Database Objects
-db = client.om
+db = client.omplus
 app.debug = os.environ.get('DEBUG', False)
 
 var = 44
 appSecret = "omPlusAppSecret"
 ERROR_NotJson = "Request Payload is Not JSon"
-
 
 # outputData = {'error': ''}
 
@@ -27,20 +26,20 @@ ERROR_NotJson = "Request Payload is Not JSon"
 
 @app.route('/', methods=['POST', 'GET'])
 def welcome():
-    outputData = {'error': ''}
+    output_data = {'error': ''}
     if not request.json:
-        outputData['error'] = ERROR_NotJson
+        output_data['error'] = ERROR_NotJson
 
-    outputData['result'] = "Welcome to OM+"
-    return jsonify(outputData)
+    output_data['result'] = "Welcome to OM+"
+    return jsonify(output_data)
 
 
 @app.route('/api/signin', methods=['POST', 'GET'])
-def signIn():
-    outputData = {'error': ''}
+def sign_in():
+    output_data = {'error': ''}
     if not request.json:
-        outputData['error'] = ERROR_NotJson
-        return jsonify(outputData)
+        output_data['error'] = ERROR_NotJson
+        return jsonify(output_data)
 
     user = request.json['email']
     pwd = request.json['password']
@@ -50,31 +49,52 @@ def signIn():
         # print len(result)
         for doc in result:
             doc['_id'] = str(doc['_id'])
-            outputData['result'] = doc
+            output_data['result'] = doc
             # return jsonify('status', 'true')
     else:
-        outputData['error'] = "All Fields Are Mandatory"
+        output_data['error'] = "All Fields Are Mandatory"
 
-    return jsonify(outputData)
+    return jsonify(output_data)
 
 
 @app.route('/api/userlist', methods=['POST', 'GET'])
-def getAllUserList():
-    outputData = {'error': ''}
+def get_all_user_list():
+    output_data = {'error': ''}
     result = db.user.find()
     res = []
     for doc in result:
         doc['_id'] = str(doc['_id'])
         res.append(doc)
 
-    outputData['result'] = res
-    return json.dumps(outputData)
+    output_data['result'] = res
+    return json.dumps(output_data)
 
 
 @app.route('/userlist', methods=['POST', 'GET'])
-def userList():
+def user_list():
     from module import user
-    return user.getUserList()
+    return user.get_user_list()
+
+
+# warehouse
+@app.route('/api/warehouse/list', methods=['POST', 'GET'])
+def warehouse_list():
+    from module import warehouse
+    return warehouse.get_warehouse_list()
+
+
+# inventory
+@app.route('/api/inventory/list', methods=['POST', 'GET'])
+def inventory_list():
+    from module import inventory
+    return inventory.get_inventory_list()
+
+
+# products
+@app.route('/api/product/list', methods=['POST', 'GET'])
+def product_list():
+    from module import product
+    return product.get_product_list()
 
 
 # ==============================================================

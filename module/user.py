@@ -2,25 +2,20 @@ import os
 
 import copy
 from flask import Flask, json, request, jsonify
-# Import MongoClient from pymongo.
-from pymongo import MongoClient
-from bson.json_util import dumps
+import omplus
 
-# app = Flask(__name__)
-
-# Create a Connection
-client = MongoClient()
-# client = MongoClient("mongodb://localhostdb:27017")
-# app.config['MONGO_DBNAME'] = 'om'
-# Access Database Objects
-db = client.om
-# app.debug = os.environ.get('DEBUG', False)
+db = omplus.db
 var = 44
 outputData = {'error': ''}
 
-def getUserList():
-    outputData = {'error': ''}
-    result = db.user.find()
+
+def get_user_list():
+    output_data = {'error': ''}
+    result = db.users.find()
+    if result.count() == 0:
+        output_data['error'] = 'No Data Found ...!'
+        return jsonify(output_data)
+
     res = []
     snl = 0
 
@@ -29,26 +24,27 @@ def getUserList():
         doc['_id'] = str(doc['_id'])
         res.append(doc)
 
-    outputData['result'] = res
+    output_data['result'] = res
 
-    return jsonify(outputData)
+    return jsonify(output_data)
 
 
 def sign_in(request):
-    print (request.json)
-    outputData = {'error': ''}
+    print(request.json)
+    output_data = {'error': ''}
     username = request.json['username']
     password = request.json['password']
-    print (username + " / " + password)
+    print(username + " / " + password)
     res = []
     result = db.user_info.find({'$and': [{"username": username, "password": password}]})
-    print ('result =========== ', result)
+
+    print('result =========== ', result)
     if result.count() > 0:
         for row in result:
             row['_id'] = str(row['_id'])
             res.append(row)
 
-        outputData['result'] = res
+        output_data['result'] = res
     else:
-        outputData['error'] = 'username & password Mismatch'
-    return outputData
+        output_data['error'] = 'username & password Mismatch'
+    return output_data
