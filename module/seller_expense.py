@@ -1,3 +1,4 @@
+import os
 from flask import Flask, abort, request, jsonify
 from flask import render_template
 from pymongo import MongoClient
@@ -89,7 +90,7 @@ def get_seller_expense_detail():
     return jsonify({"result": output})
 
 
-@app.route(@app.route('/seller/<seller_id>/expenses/<expense_id>/update-expense-detail',methods=['POST']))
+@app.route('/seller/<seller_id>/expenses/<expense_id>/update-expense-detail',methods=['POST'])
 def update_seller_expense_detail():
     """
         Api to update any particular expense deail of a seller.
@@ -130,7 +131,7 @@ def update_seller_expense_detail():
     return jsonify({"result": output_data}) 
 
 
-@app.route(@app.route('/seller/<seller_id>/expenses/<expense_id>/delete',methods=['POST']))
+@app.route('/seller/<seller_id>/expenses/<expense_id>/delete',methods=['POST'])
 def delete_seller_expense_detail():
     """
         Api to delete any particular purchase deail of a seller.
@@ -154,3 +155,4 @@ def delete_seller_expense_detail():
     
     output_data['result'] = 'Expense details removed successfully'
     return jsonify({"result": output_data})
+
