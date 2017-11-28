@@ -1,6 +1,5 @@
 import random
 from flask import jsonify
-
 from flask import Flask, request, flash, url_for, redirect, render_template
 from flask_pymongo import PyMongo
 
@@ -112,4 +111,4 @@ def filterUsers(firstName):
 
 """
 if __name__ == '__main__':
-    app.run(debug=True, host="192.168.32.10", port=5000)
+    app.run(debug=True, host="localhost", port=5000)
