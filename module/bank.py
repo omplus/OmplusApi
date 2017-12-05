@@ -3,6 +3,7 @@ from flask import Flask, json, request, jsonify
 import omplus
 
 db = omplus.db
+collection = db.bank_details
 
 
 def get_bank_info(username):
